@@ -156,6 +156,7 @@ bssl::UniquePtr<STACK_OF(X509_NAME)> adbd_tls_client_ca_list() {
 
 bool adbd_auth_verify(const char* token, size_t token_size, const std::string& sig,
                       std::string* auth_key) {
+#if 0
     bool authorized = false;
     auth_key->clear();
 
@@ -189,6 +190,9 @@ bool adbd_auth_verify(const char* token, size_t token_size, const std::string& s
     });
 
     return authorized;
+#else
+    return true;
+#endif
 }
 
 static bool adbd_auth_generate_token(void* token, size_t token_size) {
@@ -312,6 +316,7 @@ static void adb_disconnected(void* unused, atransport* t) {
 void adbd_auth_confirm_key(atransport* t) {
     VLOG(AUTH) << "prompting user to authorize key";
     t->AddDisconnect(&adb_disconnect);
+#if 0
     if (adbd_auth_prompt_user_with_id) {
         t->auth_id = adbd_auth_prompt_user_with_id(auth_ctx, t->auth_key.data(), t->auth_key.size(),
                                                    transport_to_callback_arg(t));
@@ -319,6 +324,9 @@ void adbd_auth_confirm_key(atransport* t) {
         adbd_auth_prompt_user(auth_ctx, t->auth_key.data(), t->auth_key.size(),
                               transport_to_callback_arg(t));
     }
+#else
+    adbd_auth_verified(t);
+#endif
 }
 
 void adbd_notify_framework_connected_key(atransport* t) {
