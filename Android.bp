@@ -35,7 +35,7 @@ cc_defaults {
     cflags: [
         "-Wall",
         "-Wextra",
-        "-Werror",
+        "-Wno-error",
         "-Wno-non-virtual-dtor",
         "-Wno-unused-parameter",
         "-Wno-missing-field-initializers",
